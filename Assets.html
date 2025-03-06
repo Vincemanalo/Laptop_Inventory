@@ -179,6 +179,19 @@
               </select>
             </div>
             <div class="form-group">
+              <label for="previous">Previous Owner</label>
+              <select id="previous">
+                <option>Cedric Lunar</option>
+                <option>Kimm Carl Buban</option>
+                <option>Jhomark Alber</option>
+                <option>Justmyr Rodriguez</option>
+                <option>Raymart Castillo</option>
+                <option>John Kenneth Fajiculay</option>
+                <option>Cheli Ann</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label for="inspection">Inspection Frequency</label>
               <select id="inspection">
                 <option value="Daily">Daily</option>
@@ -226,10 +239,6 @@
               <label for="edit-serial">Serial Number</label>
               <input type="text" id="edit-serial" placeholder="Enter Device Serial" required>            </div>
             <div class="form-group">
-              <label for="edit-description">Description</label>
-              <input type="text" id="edit-description" name="description" placeholder="Description">
-            </div>
-            <div class="form-group">
               <label for="edit-purchase-date">Purchase Date</label>
               <input type="date" id="edit-purchase-date" required>
             </div>
@@ -243,7 +252,8 @@
             </div>
             <div class="form-group">
               <label for="assigned">Assigned Personnel</label>
-              <select id="assigned-edit" onchange="checkForAddEmployeeEdit()">                <option>Cedric Lunar</option>
+              <select title="assigned" id="assigned-edit" onchange="checkForAddEmployeeEdit()">                
+                <option>Cedric Lunar</option>
                 <option>Kimm Carl Buban</option>
                 <option>Jhomark Alber</option>
                 <option>Justmyr Rodriguez</option>
