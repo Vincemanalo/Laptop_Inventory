@@ -370,18 +370,6 @@ tr:hover {
   transition: background 0.3s ease-in-out;
 }
 
-td:first-child,
-th:first-child {
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-}
-
-td:last-child,
-th:last-child {
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
 @media (max-width: 768px) {
   table {
     font-size: 0.9rem;
@@ -566,7 +554,9 @@ th:last-child {
 }
 
 /* Popup Overlay */
-.popup-form {
+.popup-form,
+.edit-popup-form,
+.add-employee-popup-form {
   position: fixed;
   top: 0;
   left: 0;
@@ -581,13 +571,29 @@ th:last-child {
 }
 
 /* Modal Form Container */
-.fillup-form {
+.fillup-form,
+.edit-fillup-form{
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: 2rem;
   width: 100%;
   max-width: 800px;
+  max-height: 90vh;
+  /* Prevents cropping by limiting height */
+  overflow-y: auto;
+  /* Scrolls if content exceeds the view */
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-employee-fillup-form {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
   max-height: 90vh;
   /* Prevents cropping by limiting height */
   overflow-y: auto;
@@ -609,7 +615,9 @@ th:last-child {
 }
 
 /* Heading */
-.fillup-form h2 {
+.fillup-form h2,
+.edit-fillup-form h2,
+.add-employee-fillup-form h2 {
   text-align: center;
   margin-bottom: 1.5rem;
   color: #333;
@@ -711,7 +719,9 @@ th:last-child {
 
 /* TESTING */
 
-.popup-wrapper {
+.popup-wrapper,
+.edit-popup-wrapper,
+.add-employee-popup-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -724,6 +734,7 @@ th:last-child {
   padding: 1rem;
   z-index: 1000;
 }
+
 
 /* Footer */
 footer {

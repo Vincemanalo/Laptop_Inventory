@@ -83,7 +83,7 @@
                 <button class="search-btn">🔍</button>
               </div>
             </div>
-                      
+
             <table id="laptop-table" border="1">
               <thead>
                 <tr>
@@ -94,29 +94,31 @@
                   <th>Assigned Personnel</th>
                   <th>Actions</th>
                 </tr>
-                <tr>
-                  <td onclick="tableModal">1</td>
-                  <td>Dell Inspiron 3501 Series</td>
-                  <td>7KJ2PH3</td>
-                  <td>New Laptop Dell (Mat Black)</td>
-                  <td>
-                    <select title="employee">
-                      <option>Sir Benjie</option>
-                      <option>Ma'am Bev</option>
-                      <option>Cedric Lunar</option>
-                      <option>Kimm Carl Buban</option>
-                      <option>Jhomark Alber</option>
-                      <option>Justmyr Rodriguez</option>
-                      <option>Raymart Castillo</option>
-                      <option>John Kenneth Fajiculay</option>
-                      <option>Cheli Ann</option>
-                    </select>
-                  </td>
-                  <td>
-                    <button id="tbl-edt-btn" class="edit-btn" onclick="editRow(this)">Edit</button>
-                  </td>
-                </tr>
               </thead>
+              <tr>
+                <td onclick="tableModal()">1</td>
+                <td>Dell Inspiron 3501 Series</td>
+                <td>7KJ2PH3</td>
+                <td>New Laptop Dell (Mat Black)</td>
+                <td>
+                  <select title="employee">
+                    <option>Sir Benjie</option>
+                    <option>Ma'am Bev</option>
+                    <option>Cedric Lunar</option>
+                    <option>Kimm Carl Buban</option>
+                    <option>Jhomark Alber</option>
+                    <option>Justmyr Rodriguez</option>
+                    <option>Raymart Castillo</option>
+                    <option>John Kenneth Fajiculay</option>
+                    <option>Cheli Ann</option>
+                  </select>
+                </td>
+                <td>
+                  <button class="edit-btn" onclick="editRow(this)" data-device="Dell Inspiron 3501 Series"
+                    data-serial="7KJ2PH3" data-description="New Laptop Dell (Mat Black)" data-purchase="2024-01-15"
+                    data-location="Main Office">Edit</button>
+                </td>
+              </tr>
               <tbody>
               </tbody>
             </table>
@@ -158,7 +160,7 @@
             </div>
             <div class="form-group">
               <label for="assigned">Assigned Personnel</label>
-              <select id="assigned">
+              <select id="assigned" onchange="checkForAddEmployee()">
                 <option>Cedric Lunar</option>
                 <option>Kimm Carl Buban</option>
                 <option>Jhomark Alber</option>
@@ -166,6 +168,7 @@
                 <option>Raymart Castillo</option>
                 <option>John Kenneth Fajiculay</option>
                 <option>Cheli Ann</option>
+                <option value="add-employee">+ Add Employee</option>
               </select>
             </div>
             <div class="form-group">
@@ -194,50 +197,45 @@
                 <option>Raymart Castillo</option>
                 <option>John Kenneth Fajiculay</option>
                 <option>Cheli Ann</option>
-                <option> Add Employee</option>
               </select>
             </div>
           </div>
 
           <div class="button-container">
             <button class="cancel" type="button" id="cancel-modal" onclick="closeModal()">Cancel</button>
-            <button class="save" type="submit">Save</button>
+            <button class="save" type="submit">Add</button>
           </div>
 
         </form>
       </div>
     </div>
-    
-    <div class="popup-wrapper">
+
+    <div class="edit-popup-wrapper" id="edit-popup-wrapper">
       <!-- Popup Overlay -->
-      <div class="popup-form" id="popup-form">
-        <form id="Edit-Laptop-form" class="editing-form">
-          <button type="button" class="close-btn" id="close-modal" onclick="closeModal()">×</button>
-          <h2>Editing</h2>
-          <div class="editing-form-grid">
-            <div class="editing-form-group">
-              <label for="device">Device Name</label>
-              <input type="text" id="device" placeholder="Enter Device Name" required>
-            </div>
-            <div class="editing-form-group">
-              <label for="purchase-date">Purchase Date</label>
-              <input type="date" id="purchase-date" required>
+      <div class="edit-popup-form" id="edit-popup-form">
+        <form id="laptop-form" class="edit-fillup-form">
+          <button type="button" class="close-btn" id="close-edit-modal" onclick="closeModal()">×</button>
+          <h2>Edit Laptop Details</h2>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="edit-device">Device Name</label>
+              <input type="text" id="edit-device" placeholder="Enter Device Name" required>
             </div>
             <div class="form-group">
-              <label for="deviceAge">Laptop Age</label>
-              <input type="number" id="deviceAge" placeholder="Enter Device Age" min="0" required>
+              <label for="edit-serial">Serial Number</label>
+              <input type="text" id="edit-serial" placeholder="Enter Device Serial" required>            </div>
+            <div class="form-group">
+              <label for="edit-description">Description</label>
+              <input type="text" id="edit-description" name="description" placeholder="Description">
             </div>
             <div class="form-group">
-              <label for="serial">Serial Number</label>
-              <input type="text" id="serial" placeholder="Enter Device Serial" required>
-            </div>
-            <div class="form-group full-width">
-              <label for="description">Description</label>
-              <input type="text" id="description" name="description" maxlength="50" placeholder="Description">
+              <label for="edit-purchase-date">Purchase Date</label>
+              <input type="date" id="edit-purchase-date" required>
             </div>
             <div class="form-group">
-              <label for="location">Location</label>
-              <select id="location">
+              <label for="edit-location">Location</label>
+              <select id="edit-location">
                 <option value="1NK Center">1NK Center</option>
                 <option value="2nd Office">2nd Office</option>
                 <option value="Warehouse">Warehouse</option>
@@ -245,22 +243,21 @@
             </div>
             <div class="form-group">
               <label for="assigned">Assigned Personnel</label>
-              <select id="assigned">
-                <option>Cedric Lunar</option>
+              <select id="assigned-edit" onchange="checkForAddEmployeeEdit()">                <option>Cedric Lunar</option>
                 <option>Kimm Carl Buban</option>
                 <option>Jhomark Alber</option>
                 <option>Justmyr Rodriguez</option>
                 <option>Raymart Castillo</option>
                 <option>John Kenneth Fajiculay</option>
                 <option>Cheli Ann</option>
+                <option value="add-employee">+ Add Employee</option>
               </select>
             </div>
             <div class="form-group">
               <label for="condition">Condition</label>
               <select id="condition">
                 <option value="Brand New">Brand New</option>
-                <option value="Working">Working</option>
-                <option value="Broken">Broken</option>
+                <option value="Working">Used</option>
               </select>
             </div>
             <div class="form-group">
@@ -285,14 +282,34 @@
               </select>
             </div>
           </div>
+
           <div class="button-container">
-            <button class="cancel" type="button" id="cancel-modal" onclick="closeModal()">Cancel</button>
-            <button class="save" type="submit">Edit</button>
+            <button class="cancel" type="button" id="cancel-edit-modal" onclick="closeModal()">Cancel</button>
+            <button class="save" type="submit">Save</button>
           </div>
+
         </form>
       </div>
     </div>
+
+    <div class="add-employee-popup-wrapper" id="add-employee-popup-wrapper">
+      <div class="add-employee-popup-form" id="add-employee-popup-form">
+        <form id="add-employee-form" class="add-employee-fillup-form">
+          <button type="button" class="close-btn" id="close-add-employee-modal" onclick="closeModal()">×</button>
+          <h2>Add Employee</h2>
     
+          <div class="form-group">
+            <label for="employee-name">Employee Name</label>
+            <input type="text" id="employee-name" placeholder="Enter Employee Name" required>
+          </div>
+    
+          <div class="button-container">
+            <button class="cancel" type="button" id="cancel-add-employee-modal" onclick="closeModal()">Cancel</button>
+            <button class="save" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>    
 
   </main>
 
