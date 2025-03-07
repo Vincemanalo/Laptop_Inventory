@@ -1,169 +1,159 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Add Modal Elements
-    const openModalBtn = document.getElementById("open-modal");
-    const closeModalBtn = document.getElementById("close-modal");
-    const cancelModalBtn = document.getElementById("cancel-modal");
-    const modalOverlay = document.querySelector(".popup-form");
-    const fillupModal = document.querySelector(".fillup-form");
-    const popupWrapper = document.querySelector(".popup-wrapper");
+    console.log("JavaScript Loaded!");
 
-    // Edit Modal Elements
-    const editModalOverlay = document.querySelector(".edit-popup-form");
-    const editPopupWrapper = document.querySelector(".edit-popup-wrapper");
-    const closeEditModalBtn = document.getElementById("close-edit-modal");
-    const editFillupModal = document.querySelector(".edit-fillup-form");
-    const cancelEditModalBtn = document.getElementById("cancel-edit-modal");
+    /* ===================== MODAL HANDLING ===================== */
 
+    const modals = {
+        add: document.querySelector(".popup-wrapper"),
+        edit: document.getElementById("edit-popup-wrapper"),
+        addEmployee: document.getElementById("add-employee-popup-wrapper"),
+    };
 
-    const closeAddEmployeeModalBtn = document.getElementById("close-add-employe-modal");
-    const cancelAddEmployeeModalBtn = document.getElementById("cancel-add-employee-modal");
+    const buttons = {
+        openModal: document.getElementById("open-modal"),
+        closeModal: document.getElementById("close-modal"),
+        cancelModal: document.getElementById("cancel-modal"),
+        closeEditModal: document.getElementById("close-edit-modal"),
+        cancelEditModal: document.getElementById("cancel-edit-modal"),
+        closeAddEmployeeModal: document.getElementById("close-add-employee-modal"),
+        cancelAddEmployeeModal: document.getElementById("cancel-add-employee-modal"),
+    };
 
+    // Function to Close All Modals
+    function closeAllModals() {
+        Object.values(modals).forEach(modal => {
+            if (modal) modal.style.display = "none";
+        });
+        document.body.style.overflow = "";
+    }
 
-    function openModal() {
-        if (fillupModal && modalOverlay && popupWrapper) {
-            fillupModal.style.display = "block";
-            modalOverlay.style.display = "flex";
-            popupWrapper.style.display = "flex";
+    // Function to Open a Modal (Closes others first)
+    function openModal(modal) {
+        closeAllModals(); // Ensure only one is open
+        if (modal) {
+            modal.style.display = "flex";
             document.body.style.overflow = "hidden";
+        } else {
+            console.error("Modal element not found!");
         }
     }
 
-    function closeModal() {
-        if (fillupModal && modalOverlay && popupWrapper) {
-            fillupModal.style.display = "none";
-            modalOverlay.style.display = "none";
-            popupWrapper.style.display = "none";
+    function closeModal(modal) {
+        if (modal) {
+            modal.style.display = "none";
             document.body.style.overflow = "";
+        } else {
+            console.error("Modal element not found!");
         }
-    }
-
-    function openEditModal() {
-        if (editFillupModal && editModalOverlay && editPopupWrapper) {
-            editFillupModal.style.display = "block";
-            editModalOverlay.style.display = "flex";
-            editPopupWrapper.style.display = "flex";
-            document.body.style.overflow = "hidden";
-        }
-    }
-
-    function closeEditModal() {
-        document.querySelector(".edit-popup-wrapper").style.display = "none";
-        document.querySelector(".edit-popup-form").style.display = "none";
-        document.body.style.overflow = "";
-    }
-
-    function closeAddEmployeeModal() {
-        document.querySelector(".edit-popup-wrapper").style.display = "none";
-        document.querySelector(".edit-popup-form").style.display = "none";
-        document.body.style.overflow = "";
     }
 
     // Event Listeners for Open/Close Modals
-    if (openModalBtn) openModalBtn.addEventListener("click", openModal);
-    if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
-    if (cancelModalBtn) cancelModalBtn.addEventListener("click", closeModal);
+    if (buttons.openModal) buttons.openModal.addEventListener("click", () => openModal(modals.add));
+    if (buttons.closeModal) buttons.closeModal.addEventListener("click", () => closeModal(modals.add));
+    if (buttons.cancelModal) buttons.cancelModal.addEventListener("click", () => closeModal(modals.add));
 
-    // Event Delegation for Multiple Edit Buttons
+    if (buttons.closeEditModal) buttons.closeEditModal.addEventListener("click", () => closeModal(modals.edit));
+    if (buttons.cancelEditModal) buttons.cancelEditModal.addEventListener("click", () => closeModal(modals.edit));
+
+    if (buttons.closeAddEmployeeModal) buttons.closeAddEmployeeModal.addEventListener("click", () => closeModal(modals.addEmployee));
+    if (buttons.cancelAddEmployeeModal) buttons.cancelAddEmployeeModal.addEventListener("click", () => closeModal(modals.addEmployee));
+
+    // Close modals when clicking outside
+    document.addEventListener("click", function (event) {
+        Object.values(modals).forEach(modal => {
+            if (event.target === modal) closeModal(modal);
+        });
+    });
+
+    /* ===================== EDIT FUNCTION ===================== */
+    
+    window.editRow = function (button) {
+        console.log("Edit button clicked");
+
+        const employeeField = document.getElementById("employee");
+        const employmentDateField = document.getElementById("employment-date");
+
+        if (employeeField) employeeField.value = button.getAttribute("data-employee") || "";
+        if (employmentDateField) employmentDateField.value = button.getAttribute("data-employment-date") || "";
+
+        openModal(modals.edit);
+    };
+
     document.addEventListener("click", function (event) {
         if (event.target.classList.contains("edit-btn")) {
-            openEditModal();
+            editRow(event.target);
         }
     });
 
-    if (closeEditModalBtn) closeEditModalBtn.addEventListener("click", closeEditModal);
-    if (cancelEditModalBtn) cancelEditModalBtn.addEventListener("click", closeEditModal);
+    /* ===================== DROPDOWN HANDLING ===================== */
 
-    if (closeAddEmployeeModalBtn) closeEditModalBtn.addEventListener("click", closeAddEmployeeModal);
-    if (cancelAddEmployeeModalBtn) cancelEditModalBtn.addEventListener("click", closeAddEmployeeModal);
+    const dropdownToggle = document.getElementById("dropdownToggle");
+    const dropdownMenu = document.querySelector(".dropdown-menu");
+    const chevDown = document.getElementById("ChevDown");
+    const chevUp = document.getElementById("ChevUp");
 
-    if (editModalOverlay) {
-        editModalOverlay.addEventListener("click", function (event) {
-            if (event.target === editModalOverlay) closeEditModal();
+    if (dropdownToggle && dropdownMenu) {
+        dropdownMenu.style.display = "none"; 
+
+        dropdownToggle.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isHidden = dropdownMenu.style.display === "none" || dropdownMenu.style.display === "";
+            dropdownMenu.style.display = isHidden ? "block" : "none";
+            chevDown.style.display = isHidden ? "none" : "inline";
+            chevUp.style.display = isHidden ? "inline" : "none";
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = "none";
+                chevDown.style.display = "inline";
+                chevUp.style.display = "none";
+            }
+        });
+
+        dropdownMenu.addEventListener("click", function (event) {
+            event.stopPropagation();
         });
     }
 
-    // Edit Row Function (Triggers Edit Modal)
-    window.editRow = function (button) {
-        // Use the updated IDs with 'edit-' prefix
-        let deviceField = document.getElementById("edit-device");
-        let serialField = document.getElementById("edit-serial");
-        let descriptionField = document.getElementById("edit-description");
-        let purchaseDateField = document.getElementById("edit-purchase-date");
-        let locationField = document.getElementById("edit-location");
-    
-        // Set values from data attributes
-        if (deviceField) deviceField.value = button.getAttribute("data-device") || "";
-        if (serialField) serialField.value = button.getAttribute("data-serial") || "";
-        if (descriptionField) descriptionField.value = button.getAttribute("data-description") || "";
-        if (purchaseDateField) purchaseDateField.value = button.getAttribute("data-purchase") || "";
-        if (locationField) locationField.value = button.getAttribute("data-location") || "";
-    
-        openEditModal(); // Open the modal after populating data
-    };   
-});
+    /* ===================== ADD EMPLOYEE HANDLING ===================== */
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Add Employee Modal Elements
-    const addEmployeeModal = document.getElementById("add-employee-popup-wrapper");
-    const closeAddEmployeeModalBtn = document.getElementById("close-add-employee-modal");
-    const cancelAddEmployeeModalBtn = document.getElementById("cancel-add-employee-modal");
     const assignedDropdown = document.getElementById("assigned");
 
-    function openAddEmployeeModal() {
-        if (addEmployeeModal) {
-            console.log("Opening Add Employee Modal...");
-            addEmployeeModal.style.display = "flex"; // Ensure this is set
-            document.body.style.overflow = "hidden";
-        } else {
-            console.error("Add Employee modal not found in DOM!");
-        }
-    }
-
-    function closeAddEmployeeModal() {
-        if (addEmployeeModal) {
-            console.log("Closing Add Employee Modal...");
-            addEmployeeModal.style.display = "none";
-            document.body.style.overflow = "";
-        }
-    }
-
     function checkForAddEmployee() {
-        console.log("Dropdown changed: ", assignedDropdown.value);
-        if (assignedDropdown.value === "add-employee") {
-            openAddEmployeeModal();
-            assignedDropdown.value = ""; // Reset selection after opening modal
+        if (assignedDropdown && assignedDropdown.value === "add-employee") {
+            openModal(modals.addEmployee);
+            assignedDropdown.value = ""; 
         }
     }
 
     function checkForAddEmployeeEdit() {
-        const dropdown = document.getElementById("assigned-edit");
-        if (dropdown.value === "add-employee") {
-            openAddEmployeeModal();
-            dropdown.value = "";
+        const editDropdown = document.getElementById("assigned-edit");
+        if (editDropdown && editDropdown.value === "add-employee") {
+            openModal(modals.addEmployee);
+            editDropdown.value = "";
         }
     }
 
-    // Event Listeners
-    if (closeAddEmployeeModalBtn) closeAddEmployeeModalBtn.addEventListener("click", closeAddEmployeeModal);
-    if (cancelAddEmployeeModalBtn) cancelAddEmployeeModalBtn.addEventListener("click", closeAddEmployeeModal);
+    if (assignedDropdown) assignedDropdown.addEventListener("change", checkForAddEmployee);
+    document.getElementById("assigned-edit")?.addEventListener("change", checkForAddEmployeeEdit);
 
-    // Close when clicking outside the modal
-    if (addEmployeeModal) {
-        addEmployeeModal.addEventListener("click", function (event) {
-            if (event.target === addEmployeeModal) {
-                closeAddEmployeeModal();
+    /* ===================== CONDITION TOGGLE ===================== */
+
+    const conditionDropdown = document.getElementById("condition");
+    const magicalDiv = document.getElementById("magicaldiv");
+
+    if (conditionDropdown && magicalDiv) {
+        conditionDropdown.addEventListener("change", function () {
+            if (this.value === "Brand New") {
+                magicalDiv.classList.add("hidden");
+            } else {
+                magicalDiv.classList.remove("hidden");
             }
         });
-    } else {
-        console.error("Add Employee modal wrapper not found in DOM!");
-    }
 
-    // Attach change event to the dropdown
-    if (assignedDropdown) {
-        assignedDropdown.addEventListener("change", checkForAddEmployee);
-    } else {
-        console.error("Assigned dropdown not found in DOM!");
+        conditionDropdown.dispatchEvent(new Event("change"));
     }
-
-    document.getElementById("assigned-edit")?.addEventListener("change", checkForAddEmployeeEdit);
 });
